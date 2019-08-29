@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Etch-A-Sketch</title>
+    <link rel="stylesheet" type="text/css" href ="style.css"/>
+</head>
+<body>
+<button id='reset'>Reset</button>
+<button id='refresh'>Refresh</button>
+<div id='center'></div>
+    <div class="container"></div>
+<script>
+    let freshGrid = document.querySelector('#refresh');
+    let reset = document.querySelector('#reset');
+    let numberOfSquares = 16;
+    const container = document.querySelector('.container');
+    const center = document.querySelector('#center');
+
+
+    reset.addEventListener("click", newGrid);
+    freshGrid.addEventListener("click", refresh);
+    
+    //Creates a grid with highlight feature when mouse hovers over it
+    function makeGrid() {
+        for (let i=0; i <  numberOfSquares * numberOfSquares; i++) {
+            let makeDiv = document.createElement('div');
+            makeDiv.classList.add('grid');
+            makeDiv.addEventListener('mouseover', function makeGreen(){
+                makeDiv.setAttribute('style', 'background: yellowgreen');
+            });
+            container.appendChild(makeDiv);
+        }
+    }
+
+    //Change the size of the grib base on the number of squares inputed
+    function resizeGrid(){
+            container.style.gridTemplate = `repeat(${numberOfSquares}, 1fr) / repeat(${numberOfSquares}, 1fr)`;
+    }
+
+    //Remove the entire grid, used to restrucutre grid with a different size
+     function remove(){
+         let squareToRemove = document.querySelectorAll('.container div');
+         squareToRemove.forEach((squareToRemove) => {
+         container.removeChild(squareToRemove);   
+         });
+     }
+
+    //Clears the highlighted sqaures in the grid
+     function refresh(){
+         let squareRefresh = document.querySelectorAll('.container div');
+         squareRefresh. forEach((squareRefresh) => {
+         squareRefresh.setAttribute('style', 'background: grey');
+        });
+     }
+
+     //Prompts a user input for a new size, and utilizes the functions above to
+     // remove the old grid, resize it and create a new grid with the user's input
+     function newGrid(){
+         let gridSize = prompt("How many square per side to make the new grid? (130 MAX)")
+         if (isNaN(gridSize)){
+             alert('Please enter a number');
+             newGrid();
+        }
+         numberOfSquares = gridSize;
+         remove();
+         resizeGrid();
+         makeGrid();
+    }
+
+    makeGrid();
+</script>
+</body>
+</html>
