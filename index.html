@@ -10,34 +10,58 @@
 <body>
 <button id='reset'>Reset</button>
 <button id='refresh'>Refresh</button>
-<div id='center'></div>
+<button id='rainbow'>Rainbow Mode</button>
     <div class="container"></div>
 <script>
     let freshGrid = document.querySelector('#refresh');
     let reset = document.querySelector('#reset');
     let numberOfSquares = 16;
+    let colorSwitch = false;
+    let colorful =document.querySelector('#rainbow')
     const container = document.querySelector('.container');
-    const center = document.querySelector('#center');
-
 
     reset.addEventListener("click", newGrid);
     freshGrid.addEventListener("click", refresh);
+    colorful.addEventListener("click", rgbSwitch);
     
     //Creates a grid with highlight feature when mouse hovers over it
     function makeGrid() {
         for (let i=0; i <  numberOfSquares * numberOfSquares; i++) {
             let makeDiv = document.createElement('div');
             makeDiv.classList.add('grid');
-            makeDiv.addEventListener('mouseover', function makeGreen(){
-                makeDiv.setAttribute('style', 'background: yellowgreen');
+            makeDiv.addEventListener('mouseover', function(e){
+            if (colorSwitch == true) {
+                rgbGenerator();
+                e.target.style.background = `rgb(${r.toString()}, ${g.toString()}, ${b.toString()})`;
+            }
+            else {
+                e.target.style.background = `yellowgreen`;
+            }
             });
-            container.appendChild(makeDiv);
+        container.appendChild(makeDiv);
+        };
+    }
+
+    //creates a random valued color between rgb for Rainbow Mode
+    function rgbGenerator() {
+        r = Math.floor(Math.random() * 150);
+        g = Math.floor(Math.random() * 150);
+        b = Math.floor(Math.random() * 150);
+    }
+
+    //a boolean switch to toggle the Rainbow Mode option
+    function rgbSwitch() {
+        if (colorSwitch == false) {
+            colorSwitch = true;
+        }
+        else {
+        colorSwitch = false;
         }
     }
 
     //Change the size of the grib base on the number of squares inputed
     function resizeGrid(){
-            container.style.gridTemplate = `repeat(${numberOfSquares}, 1fr) / repeat(${numberOfSquares}, 1fr)`;
+        container.style.gridTemplate = `repeat(${numberOfSquares}, 1fr) / repeat(${numberOfSquares}, 1fr)`;
     }
 
     //Remove the entire grid, used to restrucutre grid with a different size
@@ -63,12 +87,14 @@
          if (isNaN(gridSize)){
              alert('Please enter a number');
              newGrid();
-        }
+         }
+         else {
          numberOfSquares = gridSize;
          remove();
          resizeGrid();
          makeGrid();
-    }
+         }
+     }  
 
     makeGrid();
 </script>
